@@ -2,15 +2,16 @@ function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 
-const changeColor = document.querySelector('[data-start]');
-const changeColorStop = document.querySelector('[data-stop]');
+const startBtn = document.querySelector('[data-start]');
+const stopBtn = document.querySelector('[data-stop]');
 const body = document.querySelector("body");
 
-changeColor.addEventListener('click', (event) => {
-  const randomColor = getRandomHexColor();
-  body.style.backgroundColor = randomColor;
-})
+startBtn.addEventListener("click", () => {
+  timerId = setInterval(() => {
+  body.style.backgroundColor = getRandomHexColor();
+  }, 1000);
+});
 
-changeColorStop.addEventListener('click', (event) => {
-
-})
+stopBtn.addEventListener("click", () => {
+  clearInterval(timerId);
+});
