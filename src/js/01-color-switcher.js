@@ -8,10 +8,14 @@ const body = document.querySelector("body");
 
 startBtn.addEventListener("click", () => {
   timerId = setInterval(() => {
-  body.style.backgroundColor = getRandomHexColor();
+    body.style.backgroundColor = getRandomHexColor();
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
   }, 1000);
 });
 
 stopBtn.addEventListener("click", () => {
   clearInterval(timerId);
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
 });
