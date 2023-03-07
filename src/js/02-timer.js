@@ -1,7 +1,8 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-/* const atetimePicker = document.querySelector('.input#datetime-picker'); */
+const atetimePicker = document.querySelector('input[type="text"]');
+const startBtn = document.querySelector('[data-start]');
 
 const options = {
   enableTime: true,
@@ -9,49 +10,13 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
-  },
+    console.log(selectedDates[0].getTime());
+  }
 };
 
-flatpickr('input[type="text"]', options);
-
-/* instance.config.onChange.push(function() { } ); */
-
-function convertMs(ms) {
-  // Number of milliseconds per unit of time
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-
-  // Remaining days
-  const days = Math.floor(ms / day);
-  // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
-  return { days, hours, minutes, seconds };
-}
-
-
-
-
-
-
-
-
-
-
-/* const timer = {
-	start() {
-		const startTime = Date.now()
-
-		setInterval(() => {
-			currentTime = Date.now();
-			console.log(currentTime - startTime);
-		}, 1000)
-	},
-} */
+flatpickr(atetimePicker, options);
+/* 
+  if (selectedDate.getTime() <= defaultDate.getTime()) {
+    startBtn.disabled = false;
+    window.alert("Please choose a date in the future")
+  } startBtn.disabled = true; */
