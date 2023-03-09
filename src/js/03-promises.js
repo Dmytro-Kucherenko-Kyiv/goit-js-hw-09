@@ -1,27 +1,51 @@
 import Notiflix from 'notiflix';
 
-const refs = {
-  delay: document.querySelector('.delay'),
-  step: document.querySelector('.step'),
-  amount: document.querySelector('.amount'),
-  createPromises: document.querySelector('button[type="submit"]')
-}
+const form = document.querySelector('.form');
 
-refs.createPromises.addEventListener('submit', createPromise);
+form.addEventListener('submit', event => {
+  event.preventDefault();
+
+  const delay = Number(form.delay.value);
+  const step = Number(form.step.value);
+  const amount = Number(form.amount.value);
+
+  const promises = [];
+  for (let i = 0; i < amount; i++) {
+    const position = i + 1;
+    const promiseDelay = delay + step * i;
+    promises.push(createPromise(position, promiseDelay));
+  }
+
+  Promise.all(
+    promises.map(promise => {
+      return promise
+        .then(result => {
+          const { position, delay } = result;
+          Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        })
+        .catch(result => {
+          const { position, delay } = result;
+          Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+        });
+    })
+  )
+    .then(() => {
+      console.log('All promises have been settled');
+    })
+    .catch(error => {
+      console.error('Something went wrong:', error);
+    });
+});
 
 function createPromise(position, delay) {
-  const shouldResolve = Math.random() > 0.3;
-  if (shouldResolve) {
-    // Fulfill
-  } else {
-    // Reject
-  }
-}
-
-createPromise(2, 1500)
-  .then(({ position, delay }) => {
-    console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-  })
-  .catch(({ position, delay }) => {
-    console.log(`❌ Rejected promise ${position} in ${delay}ms`);
+  return new Promise((decide, dismiss) => {
+    setTimeout(() => {
+      const shouldResolve = Math.random() > 0.3;
+      if (shouldResolve) {
+        decide({ position, delay });
+      } else {
+        dismiss({ position, delay });
+      }
+    }, delay);
   });
+}
